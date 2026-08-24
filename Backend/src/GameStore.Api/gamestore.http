@@ -1,0 +1,29 @@
+GET http://localhost:5192/games
+
+###
+GET http://localhost:5192/games/5119b149-134a-4e7a-af14-24e12c2dbcd0
+
+###
+POST http://localhost:5192/games
+Content-Type: application/json
+
+{
+  "name": "Minecraft",
+  "genre": "Kids and family",
+  "price": 19.99,
+  "releaseDate": "2011-11-18"
+}
+
+###
+PUT http://localhost:5192/games/5119b149-134a-4e7a-af14-24e12c2dbcd0
+Content-Type: application/json
+
+  {
+    "name": "Street Fighter II Turbo",
+    "genre": "Fighting",
+    "price": 9.99,
+    "releaseDate": "1992-07-15"
+  }
+
+###
+DELETE http://localhost:5192/games/730918fd-6e01-480e-a76f-1f08b208b95e
