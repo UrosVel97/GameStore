@@ -1,7 +1,7 @@
 GET http://localhost:5192/games
 
 ###
-GET http://localhost:5192/games/f29707c6-032f-42ae-8053-4469020cab9b
+GET  http://localhost:5192/games/19e37344-f88c-4b80-bffd-d3210f485024
 
 ###
 POST http://localhost:5192/games
@@ -9,9 +9,10 @@ Content-Type: application/json
 
 {
   "name": "Minecraft",
-  "genre": "Kids and family",
+  "genreId": "80d4c16e-1b18-4041-9a76-3433a8b902f0",
   "price": 19.99,
-  "releaseDate": "2011-11-18"
+  "releaseDate": "2011-11-18",
+  "description": "A sandbox game about placing blocks and going on adventures."
 }
 
 ###
@@ -27,3 +28,6 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:5192/games/730918fd-6e01-480e-a76f-1f08b208b95e
+
+###
+GET http://localhost:5192/genres

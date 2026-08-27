@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using GameStore.Api.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -70,27 +71,64 @@ List<Game> games =
 ];
 
 //GET /games
-app.MapGet("/games", () => games);
+app.MapGet("/games", () => games.Select(game =>
+    new GameSummaryDto(
+        game.Id,
+        game.Name,
+        game.Genre.Name,
+        game.Price,
+        game.ReleaseDate
+    )
+));
 
 //GET /games/{id}
 app.MapGet("/games/{id}", (Guid id) =>
 {
     Game? game = games.Find(u => u.Id == id);
 
-    return game is null ? Results.NotFound() : Results.Ok(game);
+    return game is null ? Results.NotFound() : Results.Ok(new GameDetailsDto(
+        game.Id,
+        game.Name,
+        game.Genre.Id,
+        game.Price,
+        game.ReleaseDate,
+        game.Description
+    ));
 
 }).WithName(GetGameEndpointName);
 
 //POST /games
-app.MapPost("/games", (Game game) =>
+app.MapPost("/games", (CreateGameDto game) =>
 {
-    game.Id = Guid.NewGuid();
-    games.Add(game);
+
+    var genre = genres.Find(u => u.Id == game.GenreId);
+
+    if (genre is null)
+    {
+        return Results.BadRequest("Invalid genre ID.");
+    }
+    var newGame = new Game
+    {
+        Id = Guid.NewGuid(),
+        Name = game.Name,
+        Genre = genre,
+        Price = game.Price,
+        ReleaseDate = game.ReleaseDate,
+        Description = game.Description
+    };
+
+    games.Add(newGame);
 
     return Results.CreatedAtRoute(
         GetGameEndpointName,
-        new { id = game.Id },
-        game);
+        new { id = newGame.Id },
+        new GameSummaryDto(
+            newGame.Id,
+            newGame.Name,
+            newGame.Genre.Name,
+            newGame.Price,
+            newGame.ReleaseDate
+        ));
 });
 
 // PUT /games/{id}
@@ -128,4 +166,39 @@ app.MapDelete("/games/{id}", (Guid id) =>
 
 });
 
+//GET /genres
+app.MapGet("/genres", () => genres.Select(genre =>
+    new GenreDto(
+        genre.Id,
+        genre.Name
+    )
+));
+
 app.Run();
+
+public record GameDetailsDto(
+    Guid Id,
+    string Name,
+    Guid GenreId,
+    decimal Price,
+    DateOnly ReleaseDate,
+    string Description
+);
+
+public record GameSummaryDto(
+    Guid Id,
+    string Name,
+    string Genre,
+    decimal Price,
+    DateOnly ReleaseDate
+);
+
+public record GenreDto(Guid Id, string Name);
+
+public record CreateGameDto(
+    [Required][StringLength(50)] string Name,
+    Guid GenreId,
+    [Range(1, 100)] decimal Price,
+    DateOnly ReleaseDate,
+    [StringLength(500)] string Description
+);
