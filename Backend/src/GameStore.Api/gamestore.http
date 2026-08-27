@@ -1,7 +1,7 @@
 GET http://localhost:5192/games
 
 ###
-GET  http://localhost:5192/games/19e37344-f88c-4b80-bffd-d3210f485024
+GET  http://localhost:5192/games/75bebea2-a145-4a92-b235-ccce23c50a97
 
 ###
 POST http://localhost:5192/games
@@ -16,14 +16,15 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:5192/games/5119b149-134a-4e7a-af14-24e12c2dbcd0
+PUT http://localhost:5192/games/75bebea2-a145-4a92-b235-ccce23c50a97
 Content-Type: application/json
 
   {
     "name": "Street Fighter II Turbo",
-    "genre": "Fighting",
+    "genreId": "e256264a-1377-42cb-9c1f-29f42f0c8094",
     "price": 9.99,
-    "releaseDate": "1992-07-15"
+    "releaseDate": "1992-07-15",
+    "description": "An enhanced version of the classic fighting game Street Fighter II."
   }
 
 ###

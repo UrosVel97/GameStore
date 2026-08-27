@@ -132,7 +132,7 @@ app.MapPost("/games", (CreateGameDto game) =>
 });
 
 // PUT /games/{id}
-app.MapPut("/games/{id}", (Guid id, Game game) =>
+app.MapPut("/games/{id}", (Guid id, UpdateGameDto gameDto) =>
 {
     var existingGame = games.Find(u => u.Id == id);
 
@@ -141,10 +141,18 @@ app.MapPut("/games/{id}", (Guid id, Game game) =>
         return Results.NotFound();
     }
 
-    existingGame.Name = game.Name;
-    existingGame.Genre = game.Genre;
-    existingGame.Price = game.Price;
-    existingGame.ReleaseDate = game.ReleaseDate;
+
+    var genre = genres.Find(u => u.Id == gameDto.GenreId);
+    if (genre is null)
+    {
+        return Results.BadRequest("Invalid genre ID.");
+    }
+
+    existingGame.Name = gameDto.Name;
+    existingGame.Genre = genre;
+    existingGame.Price = gameDto.Price;
+    existingGame.ReleaseDate = gameDto.ReleaseDate;
+    existingGame.Description = gameDto.Description;
 
     return Results.NoContent();
 
@@ -193,8 +201,6 @@ public record GameSummaryDto(
     DateOnly ReleaseDate
 );
 
-public record GenreDto(Guid Id, string Name);
-
 public record CreateGameDto(
     [Required][StringLength(50)] string Name,
     Guid GenreId,
@@ -202,3 +208,14 @@ public record CreateGameDto(
     DateOnly ReleaseDate,
     [StringLength(500)] string Description
 );
+
+public record UpdateGameDto(
+    [Required][StringLength(50)] string Name,
+    Guid GenreId,
+    [Range(1, 100)] decimal Price,
+    DateOnly ReleaseDate,
+    [StringLength(500)] string Description
+);
+
+public record GenreDto(Guid Id, string Name);
+
