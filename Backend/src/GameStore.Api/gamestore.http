@@ -1,7 +1,7 @@
 GET http://localhost:5192/games
 
 ###
-GET  http://localhost:5192/games/75bebea2-a145-4a92-b235-ccce23c50a97
+GET  http://localhost:5192/games/a94dd880-f026-4229-9870-c5ed22e8f14f
 
 ###
 POST http://localhost:5192/games
@@ -16,7 +16,7 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:5192/games/75bebea2-a145-4a92-b235-ccce23c50a97
+PUT http://localhost:5192/games/c3cee3f1-8af7-4e66-85e0-572784fb0da2
 Content-Type: application/json
 
   {
@@ -28,7 +28,7 @@ Content-Type: application/json
   }
 
 ###
-DELETE http://localhost:5192/games/730918fd-6e01-480e-a76f-1f08b208b95e
+DELETE http://localhost:5192/games/c3cee3f1-8af7-4e66-85e0-572784fb0da2
 
 ###
 GET http://localhost:5192/genres
