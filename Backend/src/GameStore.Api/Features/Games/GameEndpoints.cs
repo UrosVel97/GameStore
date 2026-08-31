@@ -17,13 +17,9 @@ public static class GameEndpoints
         var group = app.MapGroup("/games");
 
         group.MapGetGames(data);
-
         group.MapGetGameById(data);
-
         group.MapCreateGame(data);
-
         group.MapUpdateGame(data);
-
         group.MapDeleteGame(data);
     }
 
