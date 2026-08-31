@@ -10,7 +10,7 @@ public static class DeleteGameEndpoint
         GameStoreData data)
     {
         // DELETE /games/{id}
-        app.MapDelete("/games/{id}", (Guid id) =>
+        app.MapDelete("/{id}", (Guid id) =>
         {
             var existingGame = data.GetGame(id);
 
