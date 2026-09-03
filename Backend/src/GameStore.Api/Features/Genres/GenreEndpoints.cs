@@ -8,12 +8,11 @@ public static class GenreEndpoints
 {
 
     public static void MapGenreEndpoints(
-        this IEndpointRouteBuilder app,
-        GameStoreData data)
+        this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/genres");
 
-        group.MapGetGenres(data);
+        group.MapGetGenres();
 
     }
 }
