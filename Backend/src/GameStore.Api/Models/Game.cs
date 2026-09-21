@@ -8,7 +8,9 @@ public class Game
 
     public required string Name { get; set; }
 
-    public required Genre Genre { get; set; }
+    public Guid GenreId { get; set; }
+
+    public Genre? Genre { get; set; }
 
 
     public decimal Price { get; set; }

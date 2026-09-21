@@ -14,7 +14,7 @@ public static class GetGamesEndpoint
                 new GameSummaryDto(
                     game.Id,
                     game.Name,
-                    game.Genre.Name,
+                    game.Genre!.Name,
                     game.Price,
                     game.ReleaseDate)
         ));

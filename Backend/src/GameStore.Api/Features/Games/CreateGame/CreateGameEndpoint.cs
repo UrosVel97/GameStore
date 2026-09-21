@@ -24,6 +24,7 @@ public static class CreateGameEndpoint
                 Id = Guid.NewGuid(),
                 Name = game.Name,
                 Genre = genre,
+                GenreId = game.GenreId,
                 Price = game.Price,
                 ReleaseDate = game.ReleaseDate,
                 Description = game.Description

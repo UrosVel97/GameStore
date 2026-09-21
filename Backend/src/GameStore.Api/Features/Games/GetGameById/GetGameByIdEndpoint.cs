@@ -19,7 +19,7 @@ public static class GetGameByIdEndpoint
             Results.Ok(new GameDetailsDto(
                         game.Id,
                         game.Name,
-                        game.Genre.Id,
+                        game.GenreId,
                         game.Price,
                         game.ReleaseDate,
                         game.Description
