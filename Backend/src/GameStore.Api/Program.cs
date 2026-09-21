@@ -25,6 +25,7 @@ var app = builder.Build();
 app.MapGameEndpoints();
 app.MapGenreEndpoints();
 
+app.MigrateDb();
 
 app.Run();
 
