@@ -11,8 +11,6 @@ builder.Services.AddSqlite<GameStoreContext>(connectionString);
 
 builder.Services.AddValidation();
 
-builder.Services.AddSingleton<GameStoreData>();
-builder.Services.AddTransient<GameDataLogger>();
 
 
 var app = builder.Build();
