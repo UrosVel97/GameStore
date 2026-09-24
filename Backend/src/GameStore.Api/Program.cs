@@ -15,17 +15,13 @@ builder.Services.AddSingleton<GameStoreData>();
 builder.Services.AddTransient<GameDataLogger>();
 
 
-
-
 var app = builder.Build();
-
-
 
 
 app.MapGameEndpoints();
 app.MapGenreEndpoints();
 
-app.MigrateDb();
+app.InitializeDb();
 
 app.Run();
 

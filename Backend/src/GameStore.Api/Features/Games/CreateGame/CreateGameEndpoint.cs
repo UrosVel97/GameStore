@@ -10,41 +10,45 @@ public static class CreateGameEndpoint
         this IEndpointRouteBuilder app)
     {
         //POST /games
-        app.MapPost("/", (CreateGameDto game, GameStoreData data, GameDataLogger logger) =>
+        app.MapPost("/", (CreateGameDto game, GameStoreContext dbContext) =>
         {
 
-            var genre = data.GetGenre(game.GenreId);
+            var genre = dbContext.Genres.Find(game.GenreId);
 
             if (genre is null)
             {
                 return Results.BadRequest("Invalid genre ID.");
             }
+
+
             var newGame = new Game
             {
                 Id = Guid.NewGuid(),
                 Name = game.Name,
-                Genre = genre,
                 GenreId = game.GenreId,
+                Genre = genre,
                 Price = game.Price,
                 ReleaseDate = game.ReleaseDate,
                 Description = game.Description
             };
 
-            data.AddGame(newGame);
+            dbContext.Games.Add(newGame);
 
-            logger.PrintGames();
+            dbContext.SaveChanges();
 
             return Results.CreatedAtRoute(
-                EndpointNames.GetGame,
-                new { id = newGame.Id },
-                new GameSummaryDto(
-                    newGame.Id,
-                    newGame.Name,
-                    newGame.Genre.Name,
-                    newGame.Price,
-                    newGame.ReleaseDate
-                ));
-        });
+                            EndpointNames.GetGame,
+                            new { id = newGame.Id },
+                            new GameSummaryDto(
+                                newGame.Id,
+                                newGame.Name,
+                                newGame.Genre.Name,
+                                newGame.Price,
+                                newGame.ReleaseDate
+                            ));
+        })
+        .Produces<GameSummaryDto>(StatusCodes.Status201Created)
+        .Produces(StatusCodes.Status400BadRequest);
 
     }
 }
