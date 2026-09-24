@@ -30,3 +30,7 @@ secrets.json
 *.log
 .DS_Store
 Thumbs.db
+# SQLite databases
+*.db
+*.db-shm
+*.db-wal

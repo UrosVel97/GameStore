@@ -11,19 +11,19 @@ public static class GetGameByIdEndpoint
         this IEndpointRouteBuilder app)
     {
         //GET /games/{id}
-        app.MapGet("/{id}", (Guid id, GameStoreData data) =>
+        app.MapGet("/{id}", (Guid id, GameStoreContext dbContext) =>
         {
-            Game? game = data.GetGame(id);
+            Game? game = dbContext.Games.Find(id);
 
             return game is null ? Results.NotFound() :
-            Results.Ok(new GameDetailsDto(
-                        game.Id,
-                        game.Name,
-                        game.GenreId,
-                        game.Price,
-                        game.ReleaseDate,
-                        game.Description
-                    ));
+                Results.Ok(new GameDetailsDto(
+                            game.Id,
+                            game.Name,
+                            game.GenreId,
+                            game.Price,
+                            game.ReleaseDate,
+                            game.Description
+                        ));
 
         }).WithName(EndpointNames.GetGame);
     }

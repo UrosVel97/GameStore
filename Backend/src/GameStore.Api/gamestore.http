@@ -1,7 +1,7 @@
 GET http://localhost:5192/games
 
 ###
-GET  http://localhost:5192/games/a94dd880-f026-4229-9870-c5ed22e8f14f
+GET  http://localhost:5192/games/D285C658-E312-42FF-A930-8E395B49B334
 
 ###
 POST http://localhost:5192/games
@@ -9,26 +9,26 @@ Content-Type: application/json
 
 {
   "name": "Minecraft",
-  "genreId": "CB743B4D-EAB6-4167-B380-939984DAC636",
+  "genreId": "7CA608E7-63D1-41E3-91C6-AAB99A28DE91",
   "price": 19.99,
   "releaseDate": "2011-11-18",
   "description": "A sandbox game about placing blocks and going on adventures."
 }
 
 ###
-PUT http://localhost:5192/games/c3cee3f1-8af7-4e66-85e0-572784fb0da2
+PUT http://localhost:5192/games/D285C658-E312-42FF-A930-8E395B49B334
 Content-Type: application/json
 
   {
     "name": "Street Fighter II Turbo",
-    "genreId": "e256264a-1377-42cb-9c1f-29f42f0c8094",
-    "price": 9.99,
+    "genreId": "8D3A8CEE-BAFC-49C0-B83F-E2C314FF05AF",
+    "price": 9.97,
     "releaseDate": "1992-07-15",
     "description": "An enhanced version of the classic fighting game Street Fighter II."
   }
 
 ###
-DELETE http://localhost:5192/games/c3cee3f1-8af7-4e66-85e0-572784fb0da2
+DELETE http://localhost:5192/games/d2e9a554-3b6f-4a64-93be-8ed9173c02f4
 
 ###
 GET http://localhost:5192/genres

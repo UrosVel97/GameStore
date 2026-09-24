@@ -1,5 +1,6 @@
 using System;
 using GameStore.Api.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Api.Features.Games.DeleteGame;
 
@@ -9,16 +10,18 @@ public static class DeleteGameEndpoint
         this IEndpointRouteBuilder app)
     {
         // DELETE /games/{id}
-        app.MapDelete("/{id}", (Guid id, GameStoreData data) =>
+        app.MapDelete("/{id}", (Guid id, GameStoreContext dbContext) =>
         {
-            var existingGame = data.GetGame(id);
+            var existingGame = dbContext.Games.Find(id);
 
             if (existingGame is null)
             {
                 return Results.NotFound();
             }
 
-            data.RemoveGame(existingGame.Id);
+            dbContext.Games
+                .Where(game => game.Id == id)
+                .ExecuteDelete();
 
             return Results.NoContent();
 
