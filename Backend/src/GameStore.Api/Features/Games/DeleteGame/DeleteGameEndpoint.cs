@@ -10,18 +10,18 @@ public static class DeleteGameEndpoint
         this IEndpointRouteBuilder app)
     {
         // DELETE /games/{id}
-        app.MapDelete("/{id}", (Guid id, GameStoreContext dbContext) =>
+        app.MapDelete("/{id}", async (Guid id, GameStoreContext dbContext) =>
         {
-            var existingGame = dbContext.Games.Find(id);
+            var existingGame = await dbContext.Games.FindAsync(id);
 
             if (existingGame is null)
             {
                 return Results.NotFound();
             }
 
-            dbContext.Games
+            await dbContext.Games
                 .Where(game => game.Id == id)
-                .ExecuteDelete();
+                .ExecuteDeleteAsync();
 
             return Results.NoContent();
 

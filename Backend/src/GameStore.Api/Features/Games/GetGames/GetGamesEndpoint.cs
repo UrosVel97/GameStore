@@ -10,8 +10,8 @@ public static class GetGamesEndpoint
     public static void MapGetGames(
         this IEndpointRouteBuilder app)
     {
-        app.MapGet("/", (GameStoreContext dbContext) =>
-            dbContext.Games
+        app.MapGet("/", async (GameStoreContext dbContext) =>
+            await dbContext.Games
             .Select(game =>
                 new GameSummaryDto(
                     game.Id,
@@ -19,6 +19,6 @@ public static class GetGamesEndpoint
                     game.Genre!.Name,
                     game.Price,
                     game.ReleaseDate)
-        ));
+        ).ToListAsync());
     }
 }

@@ -19,7 +19,7 @@ var app = builder.Build();
 app.MapGameEndpoints();
 app.MapGenreEndpoints();
 
-app.InitializeDb();
+await app.InitializeDbAsync();
 
 app.Run();
 
