@@ -21,6 +21,7 @@ app.MapGenreEndpoints();
 
 await app.InitializeDbAsync();
 
+
 app.Run();
 
 

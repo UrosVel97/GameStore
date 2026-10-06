@@ -11,6 +11,9 @@ public static class DataExtensions
     {
         await app.MigrateDbAsync();
         await app.SeedDataAsync();
+
+        app.Logger.LogInformation(18, "The database has been initialized successfully.");
+
     }
 
     private static async Task MigrateDbAsync(this WebApplication app)
