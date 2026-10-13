@@ -4,8 +4,12 @@ using GameStore.Api.Features.Games;
 using Microsoft.EntityFrameworkCore;
 using GameStore.Api.Shared.Timing;
 using Microsoft.AspNetCore.HttpLogging;
+using GameStore.Api.Shared.ErrorHandling;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddProblemDetails()
+                .AddExceptionHandler<GlobalExceptionHandler>();
 
 var connectionString = builder.Configuration.GetConnectionString("GameStore");
 
@@ -30,6 +34,13 @@ app.MapGameEndpoints();
 app.MapGenreEndpoints();
 
 app.UseHttpLogging();
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler();
+}
+
+app.UseStatusCodePages();
 
 await app.InitializeDbAsync();
 
