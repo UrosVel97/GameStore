@@ -27,6 +27,8 @@ builder.Services.AddHttpLogging(options =>
 
 });
 
+builder.Services.AddOpenApi();
+
 var app = builder.Build();
 
 
@@ -35,7 +37,12 @@ app.MapGenreEndpoints();
 
 app.UseHttpLogging();
 
-if (!app.Environment.IsDevelopment())
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
+else
 {
     app.UseExceptionHandler();
 }

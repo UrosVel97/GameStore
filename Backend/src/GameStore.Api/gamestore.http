@@ -1,4 +1,4 @@
-GET http://localhost:5192/games?name=street&pageSize=10
+GET http://localhost:5192/openapi/v1.json
 
 ###
 GET  http://localhost:5192/games/D285C658-E312-42FF-A930-8E395B49B334
