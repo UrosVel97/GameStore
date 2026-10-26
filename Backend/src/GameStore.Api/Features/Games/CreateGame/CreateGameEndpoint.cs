@@ -2,21 +2,43 @@ using System;
 using GameStore.Api.Data;
 using GameStore.Api.Features.Games.Constants;
 using GameStore.Api.Models;
+using GameStore.Api.Shared.FileUpload;
+using Microsoft.AspNetCore.Mvc;
 namespace GameStore.Api.Features.Games.CreateGame;
 
 public static class CreateGameEndpoint
 {
+    private const string DefaultImageUri = "https://placehold.co/100";
+
     public static void MapCreateGame(
         this IEndpointRouteBuilder app)
     {
         //POST /games
         app.MapPost("/", async (
-            CreateGameDto game,
+           [FromForm] CreateGameDto gameDto,
             GameStoreContext dbContext,
-            ILogger<Program> logger) =>
+            ILogger<Program> logger,
+            FileUploader fileUploader) =>
         {
+            var imageUri = DefaultImageUri;
 
-            var genre = await dbContext.Genres.FindAsync(game.GenreId);
+            if (gameDto.ImageFile is not null)
+            {
+                var fileUploadResult = await fileUploader.UploadFileAsync(
+                    gameDto.ImageFile,
+                    StorageNames.GameImagesFolder);
+
+                if (!fileUploadResult.IsSuccess)
+                {
+                    return Results.BadRequest(new { message = fileUploadResult.ErrorMessage });
+                }
+
+                imageUri = fileUploadResult.FileUrl;
+
+
+            }
+
+            var genre = await dbContext.Genres.FindAsync(gameDto.GenreId);
 
             if (genre is null)
             {
@@ -27,12 +49,13 @@ public static class CreateGameEndpoint
             var newGame = new Game
             {
                 Id = Guid.NewGuid(),
-                Name = game.Name,
-                GenreId = game.GenreId,
+                Name = gameDto.Name,
+                GenreId = gameDto.GenreId,
                 Genre = genre,
-                Price = game.Price,
-                ReleaseDate = game.ReleaseDate,
-                Description = game.Description
+                Price = gameDto.Price,
+                ReleaseDate = gameDto.ReleaseDate,
+                Description = gameDto.Description,
+                ImageUri = imageUri!
             };
 
             dbContext.Games.Add(newGame);
@@ -53,7 +76,8 @@ public static class CreateGameEndpoint
                                 newGame.Name,
                                 newGame.Genre.Name,
                                 newGame.Price,
-                                newGame.ReleaseDate
+                                newGame.ReleaseDate,
+                                newGame.ImageUri
                             ));
         })
         .Produces<GameSummaryDto>(StatusCodes.Status201Created)

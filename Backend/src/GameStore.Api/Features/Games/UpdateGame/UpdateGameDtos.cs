@@ -8,4 +8,7 @@ public record UpdateGameDto(
     [Range(1, 100)] decimal Price,
     DateOnly ReleaseDate,
     [StringLength(500)] string Description
-);
+)
+{
+    public IFormFile? ImageFile { get; set; }
+}

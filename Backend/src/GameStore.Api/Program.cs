@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using GameStore.Api.Shared.Timing;
 using Microsoft.AspNetCore.HttpLogging;
 using GameStore.Api.Shared.ErrorHandling;
+using GameStore.Api.Shared.FileUpload;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,10 @@ builder.Services.AddHttpLogging(options =>
 });
 
 builder.Services.AddOpenApi();
+
+builder.Services.AddHttpContextAccessor()
+                .AddSingleton<FileUploader>();
+
 
 var app = builder.Build();
 
