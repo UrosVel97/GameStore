@@ -81,7 +81,9 @@ public static class CreateGameEndpoint
                             ));
         })
         .Produces<GameSummaryDto>(StatusCodes.Status201Created)
-        .Produces(StatusCodes.Status400BadRequest);
+        .Produces(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status404NotFound)
+        .DisableAntiforgery();
 
     }
 }

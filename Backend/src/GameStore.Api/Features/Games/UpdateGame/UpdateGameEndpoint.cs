@@ -48,7 +48,11 @@ public static class UpdateGameEndpoint
             await dbContext.SaveChangesAsync();
             return Results.NoContent();
 
-        });
+        })
+        .Produces(StatusCodes.Status204NoContent)
+        .Produces(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status404NotFound)
+        .DisableAntiforgery();
 
     }
 }

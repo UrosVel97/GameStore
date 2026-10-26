@@ -1,19 +1,38 @@
 GET http://localhost:5192/openapi/v1.json
 
 ###
-GET  http://localhost:5192/games/D285C658-E312-42FF-A930-8E395B49B334
+GET  http://localhost:5192/games/6f62c786-6b58-449f-a884-cfb0c18b2691
 
 ###
 POST http://localhost:5192/games
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=GameBoundary
 
-{
-  "name": "Minecraft",
-  "genreId": "7CA608E7-63D1-41E3-91C6-AAB99A28DE91",
-  "price": 19.99,
-  "releaseDate": "2011-11-18",
-  "description": "A sandbox game about placing blocks and going on adventures."
-}
+--GameBoundary
+Content-Disposition: form-data; name="Name"
+
+Minecraft
+--GameBoundary
+Content-Disposition: form-data; name="GenreId"
+
+7CA608E7-63D1-41E3-91C6-AAB99A28DE91
+--GameBoundary
+Content-Disposition: form-data; name="Price"
+
+19.99
+--GameBoundary
+Content-Disposition: form-data; name="ReleaseDate"
+
+2011-11-18
+--GameBoundary
+Content-Disposition: form-data; name="Description"
+
+A sandbox game about placing blocks and going on adventures.
+--GameBoundary
+Content-Disposition: form-data; name="ImageFile"; filename="favicon.png"
+Content-Type: image/png
+
+< ..\..\..\Frontend\src\GameStore.Frontend\wwwroot\favicon.png
+--GameBoundary--
 
 ###
 PUT http://localhost:5192/games/D285C658-E312-42FF-A930-8E395B49B334
