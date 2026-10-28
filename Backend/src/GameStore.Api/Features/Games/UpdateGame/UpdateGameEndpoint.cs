@@ -25,6 +25,8 @@ public static class UpdateGameEndpoint
                 return Results.NotFound();
             }
 
+            var previousImageUri = existingGame.ImageUri;
+
             if (gameDto.ImageFile is not null)
             {
                 var fileUploadResult = await fileUploader.UploadFileAsync(
@@ -45,7 +47,28 @@ public static class UpdateGameEndpoint
             existingGame.ReleaseDate = gameDto.ReleaseDate;
             existingGame.Description = gameDto.Description;
 
-            await dbContext.SaveChangesAsync();
+            var updateSucceeded = false;
+            try
+            {
+                await using var transaction = await dbContext.Database.BeginTransactionAsync();
+                await dbContext.SaveChangesAsync();
+
+                if (gameDto.ImageFile is not null)
+                {
+                    fileUploader.DeleteFile(previousImageUri, StorageNames.GameImagesFolder);
+                }
+
+                await transaction.CommitAsync();
+                updateSucceeded = true;
+            }
+            finally
+            {
+                if (!updateSucceeded && gameDto.ImageFile is not null)
+                {
+                    fileUploader.DeleteFile(existingGame.ImageUri, StorageNames.GameImagesFolder);
+                }
+            }
+
             return Results.NoContent();
 
         })

@@ -62,6 +62,21 @@ else
                     <label for="releaseDate" class="form-label">Release Date:</label>
                     <InputDate id="releaseDate" @bind-Value="game.ReleaseDate" class="form-control" />
                 </div>
+                <div class="mb-3">
+                    <label for="imageFile" class="form-label">Image:</label>
+                    @if (!string.IsNullOrWhiteSpace(currentImageUri))
+                    {
+                        <div class="mb-2">
+                            <img src="@currentImageUri" alt="@game.Name cover" class="img-thumbnail"
+                                 width="150" />
+                        </div>
+                    }
+                    <input id="imageFile" name="imageFile" type="file" accept=".jpg,.jpeg,.png"
+                           class="form-control" aria-describedby="image-help" />
+                    <div id="image-help" class="form-text">
+                        Optional JPG or PNG, up to 10 MB. Leave empty to keep the current image.
+                    </div>
+                </div>
                 <button type="submit" class="btn btn-primary">Save</button>
                 <a role="button" class="btn btn-secondary" href="/catalog">Cancel</a>
             </EditForm>
@@ -76,25 +91,26 @@ else
     [SupplyParameterFromForm]
     private GameDetails? game { get; set; }
 
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
     private Genre[]? genres;
+    private string? currentImageUri;
     private string title = string.Empty;
     private List<string> errorList = [];
 
     protected override async Task OnParametersSetAsync()
     {
-        if (game is not null)
-        {
-            return;
-        }
-
         if (Id is not null)
         {
-            game = await GamesClient.GetGameAsync(Id.Value);
+            var existingGame = await GamesClient.GetGameAsync(Id.Value);
+            game ??= existingGame;
+            currentImageUri = existingGame.ImageUri;
             title = $"Edit {game.Name}";
         }
         else
         {
-            game = new()
+            game ??= new()
                 {
                     Name = string.Empty,
                     ReleaseDate = DateOnly.FromDateTime(DateTime.UtcNow),
@@ -117,14 +133,21 @@ else
         CommandResult result;
         errorList.Clear();
 
+        var form = await HttpContext.Request.ReadFormAsync();
+        var imageFile = form.Files.GetFile("imageFile");
+        if (string.IsNullOrEmpty(imageFile?.FileName))
+        {
+            imageFile = null;
+        }
+
         if (Id is null)
         {
-            result = await GamesClient.AddGameAsync(game);
+            result = await GamesClient.AddGameAsync(game, imageFile);
         }
         else
         {
             game.Id = Id.Value;
-            result = await GamesClient.UpdateGameAsync(game);
+            result = await GamesClient.UpdateGameAsync(game, imageFile);
         }
 
         if (result.Succeeded)

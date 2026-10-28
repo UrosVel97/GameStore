@@ -2,8 +2,33 @@ namespace GameStore.Api.Shared.FileUpload;
 
 public class FileUploader(
     IWebHostEnvironment environment,
-    IHttpContextAccessor httpContextAccessor)
+    IHttpContextAccessor httpContextAccessor,
+    ILogger<FileUploader> logger)
 {
+    public void DeleteFile(string? fileUrl, string folder)
+    {
+        var pathPrefix = $"/{folder}/";
+        if (!Uri.TryCreate(fileUrl, UriKind.Absolute, out var uri) ||
+            (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps) ||
+            !uri.AbsolutePath.StartsWith(pathPrefix, StringComparison.Ordinal))
+        {
+            logger.LogDebug("Skipping image outside the upload folder: {ImageUri}", fileUrl);
+            return;
+        }
+
+        var fileName = uri.AbsolutePath[pathPrefix.Length..];
+        var extension = Path.GetExtension(fileName);
+        if (fileName != Path.GetFileName(fileName) ||
+            !Guid.TryParseExact(Path.GetFileNameWithoutExtension(fileName), "D", out _) ||
+            extension is not (".jpg" or ".jpeg" or ".png"))
+        {
+            logger.LogWarning("Skipping image with an unmanaged file name: {ImageUri}", fileUrl);
+            return;
+        }
+
+        File.Delete(Path.Combine(environment.WebRootPath, folder, fileName));
+    }
+
     public async Task<FileUploadResult> UploadFileAsync(
         IFormFile file,
         string folder)

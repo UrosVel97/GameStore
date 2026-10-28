@@ -19,8 +19,10 @@ public class GameDetails
     public decimal Price { get; set; }
 
     public DateOnly ReleaseDate { get; set; }
-    
+
     [Required]
     [StringLength(500)]
     public required string Description { get; set; }
+
+    public string? ImageUri { get; set; }
 }

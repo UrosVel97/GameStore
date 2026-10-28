@@ -1,15 +1,19 @@
-﻿using GameStore.Frontend.Models;
+﻿using System.Globalization;
+using GameStore.Frontend.Models;
 
 namespace GameStore.Frontend.Clients;
 
 public class GamesClient(HttpClient httpClient)
 {
-    public async Task<GameSummary[]> GetGamesAsync()
-        => await httpClient.GetFromJsonAsync<GameSummary[]>($"games") ?? [];
+    public async Task<GamesPage> GetGamesAsync(int pageNumber = 1, string? name = null)
+        => await httpClient.GetFromJsonAsync<GamesPage>(
+            $"games?pageNumber={pageNumber}&name={Uri.EscapeDataString(name ?? string.Empty)}")
+            ?? throw new Exception("Could not load games!");
 
-    public async Task<CommandResult> AddGameAsync(GameDetails game)
+    public async Task<CommandResult> AddGameAsync(GameDetails game, IFormFile? imageFile = null)
     {
-        var response = await httpClient.PostAsJsonAsync("games", game);
+        using var content = CreateGameContent(game, imageFile);
+        using var response = await httpClient.PostAsync("games", content);
         return await response.HandleAsync();
     }
 
@@ -17,9 +21,10 @@ public class GamesClient(HttpClient httpClient)
         => await httpClient.GetFromJsonAsync<GameDetails>($"games/{id}")
             ?? throw new Exception("Could not find game!");
 
-    public async Task<CommandResult> UpdateGameAsync(GameDetails updatedGame)
+    public async Task<CommandResult> UpdateGameAsync(GameDetails updatedGame, IFormFile? imageFile = null)
     {
-        var response = await httpClient.PutAsJsonAsync($"games/{updatedGame.Id}", updatedGame);
+        using var content = CreateGameContent(updatedGame, imageFile);
+        using var response = await httpClient.PutAsync($"games/{updatedGame.Id}", content);
         return await response.HandleAsync();
     }
 
@@ -27,5 +32,24 @@ public class GamesClient(HttpClient httpClient)
     {
         var response = await httpClient.DeleteAsync($"games/{id}");
         return await response.HandleAsync();
+    }
+
+    private static MultipartFormDataContent CreateGameContent(GameDetails game, IFormFile? imageFile)
+    {
+        var content = new MultipartFormDataContent
+        {
+            { new StringContent(game.Name), nameof(game.Name) },
+            { new StringContent(game.GenreId?.ToString() ?? string.Empty), nameof(game.GenreId) },
+            { new StringContent(game.Price.ToString(CultureInfo.InvariantCulture)), nameof(game.Price) },
+            { new StringContent(game.ReleaseDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)), nameof(game.ReleaseDate) },
+            { new StringContent(game.Description), nameof(game.Description) }
+        };
+
+        if (imageFile is not null)
+        {
+            content.Add(new StreamContent(imageFile.OpenReadStream()), "ImageFile", Path.GetFileName(imageFile.FileName));
+        }
+
+        return content;
     }
 }
