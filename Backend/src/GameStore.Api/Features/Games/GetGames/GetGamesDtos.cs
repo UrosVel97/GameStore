@@ -15,5 +15,6 @@ public record GameSummaryDto(
     string Genre,
     decimal Price,
     DateOnly ReleaseDate,
-    string ImageUri
+    string ImageUri,
+    string LastUpdatedBy
 );

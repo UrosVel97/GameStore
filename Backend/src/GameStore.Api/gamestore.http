@@ -5,6 +5,7 @@ GET  http://localhost:5192/games/6f62c786-6b58-449f-a884-cfb0c18b2691
 
 ###
 POST http://localhost:5192/games
+Authorization: Bearer {{$dotenv GAMESTORE_BEARER_TOKEN}}
 Content-Type: multipart/form-data; boundary=GameBoundary
 
 --GameBoundary

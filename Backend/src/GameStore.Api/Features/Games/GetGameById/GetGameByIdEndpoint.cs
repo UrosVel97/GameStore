@@ -29,7 +29,8 @@ public static class GetGameByIdEndpoint
                             game.Price,
                             game.ReleaseDate,
                             game.Description,
-                            game.ImageUri
+                            game.ImageUri,
+                            game.LastUpdatedBy
                         ));
 
 

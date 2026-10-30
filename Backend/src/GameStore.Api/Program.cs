@@ -30,6 +30,10 @@ builder.Services.AddHttpLogging(options =>
 
 builder.Services.AddOpenApi();
 
+builder.Services.AddAuthentication()
+                .AddJwtBearer();
+
+
 builder.Services.AddHttpContextAccessor()
                 .AddSingleton<FileUploader>();
 
