@@ -31,7 +31,10 @@ builder.Services.AddHttpLogging(options =>
 builder.Services.AddOpenApi();
 
 builder.Services.AddAuthentication()
-                .AddJwtBearer();
+                .AddJwtBearer(options =>
+                {
+                    options.MapInboundClaims = false;
+                });
 
 
 builder.Services.AddHttpContextAccessor()
