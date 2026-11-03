@@ -1,4 +1,5 @@
 using System;
+using GameStore.Api.Features.Baskets.GetBasket;
 using GameStore.Api.Features.Baskets.UpsertBasket;
 
 namespace GameStore.Api.Features.Baskets;
@@ -11,6 +12,7 @@ public static class BasketsEndpoints
         var group = app.MapGroup("/baskets");
 
         group.MapUpsertBasket();
+        group.MapGetBasket();
     }
 
 }
