@@ -1,6 +1,7 @@
 using GameStore.Api.Data;
 using GameStore.Api.Features.Genres;
 using GameStore.Api.Features.Games;
+using GameStore.Api.Features.Baskets;
 using Microsoft.EntityFrameworkCore;
 using GameStore.Api.Shared.Timing;
 using Microsoft.AspNetCore.HttpLogging;
@@ -46,6 +47,8 @@ var app = builder.Build();
 app.UseStaticFiles();
 app.MapGameEndpoints();
 app.MapGenreEndpoints();
+app.MapBaskets();
+
 
 app.UseHttpLogging();
 
