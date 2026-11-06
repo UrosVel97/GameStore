@@ -4,6 +4,7 @@ using System.Security.Claims;
 using GameStore.Api.Data;
 using GameStore.Api.Features.Games.Constants;
 using GameStore.Api.Models;
+using GameStore.Api.Shared.Authorization;
 using GameStore.Api.Shared.FileUpload;
 using Microsoft.AspNetCore.Mvc;
 namespace GameStore.Api.Features.Games.CreateGame;
@@ -101,7 +102,10 @@ public static class CreateGameEndpoint
         .Produces<GameSummaryDto>(StatusCodes.Status201Created)
         .Produces(StatusCodes.Status400BadRequest)
         .Produces(StatusCodes.Status404NotFound)
-        .DisableAntiforgery();
+        .DisableAntiforgery()
+        .RequireAuthorization(builder =>
+                                    builder.RequireRole(Roles.Admin));
+
 
     }
 }

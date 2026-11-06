@@ -29,13 +29,16 @@ builder.Services.AddHttpLogging(options =>
 
 });
 
-builder.Services.AddOpenApi();
 
 builder.Services.AddAuthentication()
                 .AddJwtBearer(options =>
                 {
                     options.MapInboundClaims = false;
+                    options.TokenValidationParameters.RoleClaimType = "role";
                 });
+
+
+builder.Services.AddAuthorizationBuilder();
 
 
 builder.Services.AddHttpContextAccessor()
