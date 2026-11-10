@@ -7,6 +7,7 @@ using GameStore.Api.Shared.Timing;
 using Microsoft.AspNetCore.HttpLogging;
 using GameStore.Api.Shared.ErrorHandling;
 using GameStore.Api.Shared.FileUpload;
+using GameStore.Api.Shared.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +39,7 @@ builder.Services.AddAuthentication()
                 });
 
 
-builder.Services.AddAuthorizationBuilder();
+builder.AddGameStoreAuthorization();
 
 
 builder.Services.AddHttpContextAccessor()

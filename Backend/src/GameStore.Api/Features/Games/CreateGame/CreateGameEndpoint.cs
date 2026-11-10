@@ -103,8 +103,7 @@ public static class CreateGameEndpoint
         .Produces(StatusCodes.Status400BadRequest)
         .Produces(StatusCodes.Status404NotFound)
         .DisableAntiforgery()
-        .RequireAuthorization(builder =>
-                                    builder.RequireRole(Roles.Admin));
+        .RequireAuthorization(Policies.AdminAccess);
 
 
     }

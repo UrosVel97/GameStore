@@ -1,6 +1,7 @@
 using System;
 using GameStore.Api.Data;
 using GameStore.Api.Features.Games.Constants;
+using GameStore.Api.Shared.Authorization;
 using GameStore.Api.Shared.FileUpload;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,6 +36,8 @@ public static class DeleteGameEndpoint
 
             return Results.NoContent();
 
-        });
+        })
+        .RequireAuthorization(Policies.AdminAccess);
+
     }
 }

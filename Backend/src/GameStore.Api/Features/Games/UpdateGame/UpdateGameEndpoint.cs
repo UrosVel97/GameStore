@@ -5,6 +5,7 @@ using GameStore.Api.Shared.FileUpload;
 using GameStore.Api.Features.Games.Constants;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using GameStore.Api.Shared.Authorization;
 
 namespace GameStore.Api.Features.Games.UpdateGame;
 
@@ -91,7 +92,9 @@ public static class UpdateGameEndpoint
         .Produces(StatusCodes.Status204NoContent)
         .Produces(StatusCodes.Status400BadRequest)
         .Produces(StatusCodes.Status404NotFound)
-        .DisableAntiforgery();
+        .DisableAntiforgery()
+        .RequireAuthorization(Policies.AdminAccess);
+
 
     }
 }

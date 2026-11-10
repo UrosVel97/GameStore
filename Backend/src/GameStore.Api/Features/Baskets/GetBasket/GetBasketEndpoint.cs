@@ -1,5 +1,6 @@
 using System;
 using GameStore.Api.Data;
+using GameStore.Api.Shared.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Api.Features.Baskets.GetBasket;
@@ -38,7 +39,8 @@ public static class GetBasketEndpoint
                 .OrderBy(item => item.Name));
 
             return Results.Ok(dto);
-        });
+        })
+        .RequireAuthorization(Policies.UserAccess);
 
 
 
