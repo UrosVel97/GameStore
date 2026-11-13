@@ -9,7 +9,7 @@ public static class AuthorizationExtensions
         this IHostApplicationBuilder builder)
     {
         builder.Services.AddAuthorizationBuilder()
-                .AddPolicy(Policies.UserAccess, authBuilder =>
+                .AddFallbackPolicy(Policies.UserAccess, authBuilder =>
                 {
                     authBuilder.RequireClaim("scope", ApiAccessScope);
                 })

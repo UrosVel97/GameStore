@@ -15,6 +15,8 @@ public static class GetGenresEndpoint
                     genre.Id,
                     genre.Name
                 )
-        ).ToListAsync());
+        )
+        .ToListAsync())
+        .AllowAnonymous();
     }
 }

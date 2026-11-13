@@ -50,8 +50,8 @@ public static class UpsertBasketEndpoint
 
             return Results.NoContent();
 
-        })
-        .RequireAuthorization(Policies.UserAccess);
+        });
+
     }
 
 }

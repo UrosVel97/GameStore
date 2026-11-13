@@ -49,6 +49,8 @@ builder.Services.AddHttpContextAccessor()
 var app = builder.Build();
 
 app.UseStaticFiles();
+
+app.UseAuthorization();
 app.MapGameEndpoints();
 app.MapGenreEndpoints();
 app.MapBaskets();

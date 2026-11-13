@@ -1,7 +1,8 @@
-GET http://localhost:5192/openapi/v1.json
+###
+GET  http://localhost:5192/games
 
 ###
-GET  http://localhost:5192/games/29c5fa37-760a-4f3b-acdd-88186fb09e78
+GET  http://localhost:5192/games/D285C658-E312-42FF-A930-8E395B49B334
 
 ###
 POST http://localhost:5192/games

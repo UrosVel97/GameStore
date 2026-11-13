@@ -34,7 +34,9 @@ public static class GetGameByIdEndpoint
                         ));
 
 
-        }).WithName(EndpointNames.GetGame);
+        })
+        .WithName(EndpointNames.GetGame)
+        .AllowAnonymous();
     }
 
 }
